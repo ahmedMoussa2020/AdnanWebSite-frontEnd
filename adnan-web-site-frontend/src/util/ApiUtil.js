@@ -98,12 +98,37 @@ export const forgotPasswordApi = async (email) => {
     if (apiResponse.status === 200) {
       response = frameResponse(1);
     }
-} catch (err) {
+  } catch (err) {
     if (err.response) {
       response = frameResponse(0, err.response.data.message);
     }
     console.log(err);
-} finally {
+  } finally {
     return response;
-}
+  }
+};
+
+export const resetPasswordApi = async (token, password) => {
+  let response = frameResponse();
+
+  try {
+    const url = `${API_BASE_URL}/user/reset`;
+    const apiResponse = await axios.post(
+      url,
+      {
+        password,
+      },
+      { headers: { Authorization: frameToken(token) } }
+    );
+    if (apiResponse.status === 200) {
+      response = frameResponse(1);
+    }
+  } catch (err) {
+    if (err.response) {
+      response = frameResponse(0, err.response.data.message);
+    }
+    console.log(err);
+  } finally {
+    return response;
+  }
 };
