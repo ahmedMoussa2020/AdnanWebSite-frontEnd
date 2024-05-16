@@ -13,38 +13,49 @@ import LogoImage from "../../assets/images/logo.png";
 import { resetPasswordApi } from "../../util/ApiUtil";
 
 const ResetPassword = () => {
+  // the useSearchParams hook from the react-router-dom library to get the search parameters from the URL. In this case, it's looking for the token search parameter.
+  // It then creates a variable verifyToken and sets its value to the value of the token search parameter.
   const [searchParams] = useSearchParams();
   const verifyToken = searchParams.get("token");
+
+  // The useRef hook is used to create a mutable object that can be referenced in the component, in this case, it's used to store a reference to the Formik component.
+  //   useState is used to set up a state variable called isFetching which will be used to keep track of whether a request to the API is in progress. Initially, isFetching is set to false.
   const formikRef = useRef();
   const [isFetching, setIsFetching] = useState(false);
 
+  // This useEffect hook sets the title of the document to "Reset Password | Feed App". The empty array passed as the second argument to useEffect means that this effect will run only once, when the component is first mounted.
   useEffect(() => {
     document.title = "Reset Password | Feed App";
   }, []);
 
+  // onFormSubmit is a function that is triggered when the form is submitted. It takes the values object which contains the form data as an argument.
   const onFormSubmit = async (values) => {
     console.log(values);
-
+    // The function first checks if isFetching is false. If it is, it sets isFetching to true to indicate that the form is currently being submitted.
     if (!isFetching) {
       setIsFetching(true);
-
+      //  it calls the resetPasswordApi function and passes in values.verifyToken and values.password as parameters. resetPasswordApi is our function that makes an API call to reset the password.
       const apiResponse = await resetPasswordApi(
         values.verifyToken,
         values.password
       );
-
+      // when its completed it checks status property apiResponse, if its === 1 it uses the formRef reference to set value for formMessage filds "Your password has been reset. Please login to continue.".
       if (apiResponse.status === 1) {
         formikRef.current.setFieldValue(
           "formMessage",
           "Your password has been reset. Please login to continue."
         );
       } else {
+        // If the status is not equal to 1, it sets the value of formMessage to apiResponse.payLoad.
         formikRef.current.setFieldValue("formMessage", apiResponse.payLoad);
-      }
+      } // Finally, it sets isFetching to false to indicate that the form submission is complete.
       setIsFetching(false);
     }
   };
 
+  // The code defines a Yup schema for validating the input fields in the reset password form. The ResetPasswordSchema object has the following fields:
+  // verifyToken: a required string.
+  // password: a required string.
   const ResetPasswordSchema = Yup.object().shape({
     verifyToken: Yup.string().required("Required"),
     password: Yup.string()
@@ -54,6 +65,7 @@ const ResetPassword = () => {
       )
       .required("Required"),
   });
+
   return (
     <div className="background-color: #FEFDF5">
       <div className="flex justify-center h-screen">

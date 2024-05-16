@@ -14,10 +14,10 @@ const Login = () => {
   const formikRef = useRef();
   const appContext = useContext(AppContext);
   const [isFetching, setIsFetching] = useState(false);
-
   useEffect(() => {
     document.title = "Login | Feed App";
   }, []);
+
   const onFormSubmit = async (values) => {
     console.log(values);
 
@@ -38,6 +38,7 @@ const Login = () => {
       setIsFetching(false);
     }
   };
+
   const LoginSchema = Yup.object().shape({
     username: Yup.string().required("Required"),
     password: Yup.string().required("Required"),
@@ -45,6 +46,7 @@ const Login = () => {
 
   return (
     <div className="background-color: #FEFDF5">
+      {/* {userLoggedIn && (<Navigate to={'/home'} replace={true} />)} */}
       <div className="flex justify-center h-screen">
         <div className="hidden bg-cover lg:block lg:w-2/3 splash-container">
           {/* {#Section 1 Çontent} */}
@@ -125,11 +127,13 @@ const Login = () => {
                   </Form>
                 )}
               </Formik>
-
               {/* {Section2 Footer} */}
-
               <p className="mt-6 text-sm text-center text-gray-400">
-                Don&#x27;t have an account yet?{" "}
+                {/* <div> */}
+                {/* <GoogleLogin /> */}
+                {/* <button onClick={handleClick}   to="">Goole</button> */}
+                {/* </div> */}
+                Don&#x27;t have an account yet?
                 <Link
                   to="/user/register"
                   className="text-purple-500 focus:outline-none focus:underline hover:underline"
