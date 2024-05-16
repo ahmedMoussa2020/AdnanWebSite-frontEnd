@@ -10,6 +10,12 @@ body,
   background-color: #FEFDF5;
 }
 
+.loader-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 85vh;
+}
 
 .splash-container {
   background-image: url(./assets/images/splash-background.jpg);
