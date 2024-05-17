@@ -3,8 +3,10 @@ import MyProfile from "../../components/MyProfile";
 import { AppContext } from "../../context/applicationContext";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import AddFeed from "../../components/AddFeed";
-
+import FeedCard from "../../components/FeedCard";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { getOthersFeedsApi } from "../../util/ApiUtil";
+
 
 const Dashboard = () => {
   const appContext = useContext(AppContext);
@@ -59,6 +61,44 @@ const Dashboard = () => {
         {/* {#AddFeed Component} */}
         <AddFeed />
         {/* {#FeedCard Component} */}
+        <InfiniteScroll
+          dataLength={feedsData.length}
+          next={() => getOthersFeeds(pageNumber)}
+          hasMore={hasMore}
+          endMessage={
+            <p className="text-center">
+              <b>Yay! You have seen it all.</b>
+            </p>
+          }
+          refreshFunction={() => getOthersFeeds(0)}
+          pullDownToRefresh
+          pullDownToRefreshThreshold={50}
+          pullDownToRefreshContent={
+            <h3 className="text-center">&#8595; Pull down to refresh</h3>
+          }
+          releaseToRefreshContent={
+            <h3 className="text-center">&#8593; Release to refresh</h3>
+          }
+        >
+          <div className="mt-3">
+            {feedsData.map(
+              ({ feedId, picture, content, createdOn, feedMetaData, user }) => (
+                <FeedCard
+                  key={feedId}
+                  feedId={feedId}
+                  picture={picture}
+                  content={content}
+                  createdOn={createdOn}
+                  username={user.username}
+                  firstName={user.firstName}
+                  lastName={user.lastName}
+                  profilePicture={user.profile ? user.profile.picture : null}
+                  feedMetaData={feedMetaData}
+                />
+              )
+            )}
+          </div>
+ </InfiniteScroll>
       </article>
     </main>
   );
