@@ -4,39 +4,42 @@ import { Cropper } from "react-advanced-cropper";
 import "react-advanced-cropper/dist/style.css";
 
 import { resizeImage } from "../util/Helper";
+//  defines an ImageCropper that takes in several props, including modalIsOpen, closeModal, uploadImageData, and setImageSrc.
+const ImageCropper = ({
+  modalIsOpen,
+  closeModal,
+  uploadImageData,
+  setImageSrc,
+}) => {
+  // customStyles constant that styles the modal.
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      border: "none",
+      backgroundColor: "transparent",
+    },
+  };
+  
+  const cropperRef = useRef();
+  const [image] = useState(uploadImageData);
+  // the cropImage is function asyn that crop an image. It does this by using the cropperRef to access the Cropper component.
+  const cropImage = async () => {
+    const cropper = cropperRef.current;
+    if (cropper) {
+      const canvas = cropper.getCanvas();
+      const resizedImage = await resizeImage(canvas.toDataURL());
+      setImageSrc(resizedImage);
+      closeModal();
+    }
+  };
 
-const ImageCropper = () => {
-  const ImageCropper = ({
-    modalIsOpen,
-    closeModal,
-    uploadImageData,
-    setImageSrc,
-  }) => {
-    const customStyles = {
-      content: {
-        top: "50%",
-        left: "50%",
-        right: "auto",
-        bottom: "auto",
-        marginRight: "-50%",
-        transform: "translate(-50%, -50%)",
-        border: "none",
-        backgroundColor: "transparent",
-      },
-    };
-    const cropperRef = useRef();
-    const [image] = useState(uploadImageData);
-
-    const cropImage = async () => {
-      const cropper = cropperRef.current;
-      if (cropper) {
-        const canvas = cropper.getCanvas();
-        const resizedImage = await resizeImage(canvas.toDataURL());
-        setImageSrc(resizedImage);
-        closeModal();
-      }
-    };
-    return (
+  return (
+    <>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -70,8 +73,8 @@ const ImageCropper = () => {
           </footer>
         </div>
       </Modal>
-    );
-  };
+    </>
+  );
 };
 
 export default ImageCropper;

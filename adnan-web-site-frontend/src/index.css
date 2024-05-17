@@ -17,6 +17,12 @@ body,
   height: 85vh;
 }
 
+.cropper {
+  width: 50vw;
+  height: 50vh;
+  background: #ddd;
+}
+
 .splash-container {
   background-image: url(./assets/images/splash-background.jpg);
 }
