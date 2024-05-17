@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from "react";
 import MyProfile from "../../components/MyProfile";
 import { AppContext } from "../../context/applicationContext";
 import LoadingIndicator from "../../components/LoadingIndicator";
+import AddFeed from "../../components/AddFeed";
 
 import { getOthersFeedsApi } from "../../util/ApiUtil";
 
@@ -56,6 +57,7 @@ const Dashboard = () => {
       <MyProfile />
       <article>
         {/* {#AddFeed Component} */}
+        <AddFeed />
         {/* {#FeedCard Component} */}
       </article>
     </main>
