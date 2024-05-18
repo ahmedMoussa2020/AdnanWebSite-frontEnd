@@ -11,19 +11,23 @@ import LoadingIndicator from "../../components/LoadingIndicator";
 import { getMyFeedsApi } from "../../util/ApiUtil";
 
 const MyFeeds = () => {
+  //Here we declare state variables
   const appContext = useContext(AppContext);
-  const token = appContext.getSession();
+  const token = appContext.getSession(); // get the token from cookies
   const userData = appContext.getUserData();
 
   const [feedsData, setFeedsData] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(0); // holds the current page number (first page of feeds)
   const [hasMore, setHasMore] = useState(true);
+  
 
   useEffect(() => {
     document.title = "My Feeds | Feed App";
     getMyFeeds(0);
   }, []);
-
+  // Define the funciton that retrieves the feeds for the user
+  // we have a similar function in the Dashboard.js component
+  
   const getMyFeeds = async (loadPageNumber) => {
     if (loadPageNumber === 0) {
       setFeedsData([]);
@@ -32,11 +36,13 @@ const MyFeeds = () => {
     const apiResponse = await getMyFeedsApi(token, loadPageNumber);
     if (apiResponse.status === 1) {
       let feedsDataNew = [];
+      //it has more pages to load
       if (loadPageNumber !== 0) {
+        // we store exsting data inte the feedsDataNew
         feedsDataNew = feedsData;
       }
-      feedsDataNew.push(...apiResponse.payLoad.content);
-      setFeedsData(feedsDataNew);
+      feedsDataNew.push(...apiResponse.payLoad.content); // we are the retreivin the new feeds and then pushing it into the
+      setFeedsData(feedsDataNew); // we are uodating the state here
 
       setPageNumber(loadPageNumber + 1);
 
@@ -51,6 +57,8 @@ const MyFeeds = () => {
   if (!userData) {
     return <LoadingIndicator />;
   }
+
+  // Rendering the JSX
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-12 mx-0 md:mx-12 w-2xl container px-2 mx-auto">
       {/* {#MyProfile Component} */}
@@ -90,6 +98,7 @@ const MyFeeds = () => {
                   lastName={user.lastName}
                   profilePicture={user.profile.picture}
                   feedMetaData={feedMetaData}
+                  loadOnDelete={getMyFeeds}
                 />
               )
             )}
